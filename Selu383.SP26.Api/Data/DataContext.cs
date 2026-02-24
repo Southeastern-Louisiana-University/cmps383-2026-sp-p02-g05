@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using Selu383.SP26.Api.Features.Locations;
 using Selu383.SP26.Api.Features.User;
 
@@ -16,6 +17,11 @@ public class DataContext : IdentityDbContext<
     }
 
     public DbSet<Location> Locations { get; set; }
+    public DbSet<User> Users { get; set; }
+
+    public DbSet<Role> Roles { get; set; }
+
+    public DbSet<UserRole> UserRoles { get; set; } 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
