@@ -11,24 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DataContext")));
 
-builder.Services.AddIdentity<User, Role>
-().AddEntityFrameworkStores<DataContext>()
-.AddDefaultTokenProviders();
 
-builder.Services.AddAuthorization();
 
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.LoginPath = "/api/authentication/login"; // where unauthenticated users get redirected
-    options.Events.OnRedirectToLogin = ctx =>
-    {
-        ctx.Response.StatusCode = 401; // Prevents redirect; sends HTTP 401 instead
-        return Task.CompletedTask;
-    };
-    options.Cookie.HttpOnly = true;
-    options.Cookie.SameSite = SameSiteMode.Strict;
-    options.ExpireTimeSpan = TimeSpan.FromHours(1);
-});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
