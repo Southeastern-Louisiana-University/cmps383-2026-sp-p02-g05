@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using Selu383.SP26.Api.Features.Locations;
-using Selu383.SP26.Api.Features.User;
+using Selu383.SP26.Api.Features.Users;
+
+
 
 namespace Selu383.SP26.Api.Data;
 
@@ -27,17 +29,22 @@ public class DataContext : IdentityDbContext<
     {
         base.OnModelCreating(modelBuilder);
 
-        var userRoleBuilder = modelBuilder.Entity<UserRole>();
+        modelBuilder.Entity<UserRole>(b =>
+        { 
+            b.HasKey(ur => new { ur.UserId, ur.RoleId });
 
-        userRoleBuilder.HasKey(x => new { x.UserId, x.RoleId });
+            b.HasOne(ur => ur.User)
+                .WithMany(u => u.Roles)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
 
-        userRoleBuilder.HasOne(x => x.Role)
-            .WithMany(x => x.UserRoles)
-            .HasForeignKey(x => x.RoleId);
+            b.HasOne(ur => ur.Role)
+            .WithMany(u => u.Users)
+            .HasForeignKey(ur => ur.RoleId)
+            .IsRequired();
 
-        userRoleBuilder.HasOne(x => x.User)
-            .WithMany(x => x.UserRoles)
-            .HasForeignKey(x => x.UserId);
-
+        });
+        // find all the "IEntityTypeConfiguration<TEntity>" implementations in this assembly and apply them
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
     }
 }
