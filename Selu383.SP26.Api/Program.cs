@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Selu383.SP26.Api.Data;
 using Selu383.SP26.Api.Features.Locations;
+using Selu383.SP26.Api.Features.User;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,12 +11,24 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DataContext")));
 
+builder.Services.AddIdentity<User, Role>(options =>
+{
+    // configure options if needed, e.g. passwords
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 6;
+})
+.AddEntityFrameworkStores<DataContext>()
+.AddDefaultTokenProviders();
+
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 var app = builder.Build();
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<DataContext>();
@@ -28,6 +43,39 @@ using (var scope = app.Services.CreateScope())
         );
         db.SaveChanges();
     }
+
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+
+    if (!await roleManager.RoleExistsAsync("Admin"))
+        await roleManager.CreateAsync(new Role { Name = "Admin" });
+
+    if (!await roleManager.RoleExistsAsync("User"))
+        await roleManager.CreateAsync(new Role { Name = "User" });
+
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+
+    async Task<User> CreateUserIfNotExists(string username, string password, string role)
+    {
+        var user = await userManager.FindByNameAsync(username);  // check if user exists
+        if (user == null)
+        {
+            user = new User { UserName = username };             // create a new User object
+            await userManager.CreateAsync(user, password);      // Identity handles hashing
+            await userManager.AddToRoleAsync(user, role);       // assigns user to role
+        }
+
+        if (!await userManager.IsInRoleAsync(user, role))
+        {
+            await userManager.AddToRoleAsync(user, role);
+        }
+
+        return user;
+    }
+
+    var galkadi = await CreateUserIfNotExists("galkadi", "Password123!", "Admin");
+    var bob = await CreateUserIfNotExists("bob", "Password123!", "User");
+    var sue = await CreateUserIfNotExists("sue", "Password123!", "User");
+
 }
 
 // Configure the HTTP request pipeline.
@@ -39,12 +87,34 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app
+    .UseRouting()
+    .UseAuthentication()
+    .UseAuthorization()
+    .UseEndpoints(x =>
+    {
+        x.MapControllers();
+    });
 
-app.MapControllers();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSpa(x =>
+    x.UseProxyToSpaDevelopmentServer("http://localhost:5173"));
+}
+else
+{
+    app.MapFallbackToFile("index.html");
+}
+
 
 app.Run();
 
+
+
 //see: https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0
 // Hi 383 - this is added so we can test our web project automatically
-public partial class Program { }
+public partial class Program
+{
+
+
+}
