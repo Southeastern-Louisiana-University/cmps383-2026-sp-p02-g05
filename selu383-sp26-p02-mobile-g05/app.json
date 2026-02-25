@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Selu383-SP26-P02-Mobile-g05",
-    "slug": "Selu383-SP26-P02-Mobile-g05",
+    "name": "selu383-sp26-p02-mobile-g05",
+    "slug": "selu383-sp26-p02-mobile-g05",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "selusp26mobile",
+    "scheme": "selu383sp26p02mobileg05",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -48,8 +48,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "06d61ce5-5780-4626-b0cd-a90e6215c7ff"
+        "projectId": "18b5c05f-20a5-4c73-8138-eaddde80f863"
       }
-    }
+    },
+    "owner": "jsoileau2004"
   }
 }
