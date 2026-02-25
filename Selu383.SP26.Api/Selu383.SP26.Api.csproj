@@ -22,12 +22,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!--<ProjectReference Include="..\selu383-sp26-web\Selu383.SP26.Web.esproj" />-->
+    <None Include="Features\User\LoginDto.cs" />
+    <None Include="Features\User\UserDto.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Features\User\LoginDto.cs" />
-    <None Include="Features\User\UserDto.cs" />
+    <ProjectReference Include="..\Selu383.SP26.Web\Selu383.SP26.Web.esproj" />
   </ItemGroup>
 
 </Project>
