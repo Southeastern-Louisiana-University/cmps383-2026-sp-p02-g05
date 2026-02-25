@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using Selu383.SP26.Api.Features.Locations;
-using Selu383.SP26.Api.Features.Users;
-
-
+using Selu383.SP26.Api.Features.User;
 
 namespace Selu383.SP26.Api.Data;
 
@@ -34,14 +32,14 @@ public class DataContext : IdentityDbContext<
             b.HasKey(ur => new { ur.UserId, ur.RoleId });
 
             b.HasOne(ur => ur.User)
-                .WithMany(u => u.Roles)
+                .WithMany(u => u.UserRoles)
                 .HasForeignKey(ur => ur.UserId)
                 .IsRequired();
 
             b.HasOne(ur => ur.Role)
-            .WithMany(u => u.Users)
-            .HasForeignKey(ur => ur.RoleId)
-            .IsRequired();
+                .WithMany(r => r.UserRoles)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
 
         });
         // find all the "IEntityTypeConfiguration<TEntity>" implementations in this assembly and apply them
