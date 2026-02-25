@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Selu383.SP26.Api.Dtos;
 using Selu383.SP26.Api.Features.User;
 
 namespace Selu383.SP26.Api.Controllers;
