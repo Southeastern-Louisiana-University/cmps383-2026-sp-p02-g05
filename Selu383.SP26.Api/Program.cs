@@ -11,7 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DataContext")));
 
-
+builder.Services.AddIdentity<User, Role>(options =>
+{
+    // configure options if needed, e.g. passwords
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 6;
+})
+.AddEntityFrameworkStores<DataContext>()
+.AddDefaultTokenProviders();
 
 
 builder.Services.AddControllers();
