@@ -13,12 +13,12 @@ public class DataContext : DbContext
     {
     }
 
-    public DbSet<Location> Locations { get; set; }
-    public DbSet<User> Users { get; set; }
+    public DbSet<Location> Locations { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
 
-    public DbSet<Role> Roles { get; set; }
+    public DbSet<Role> Roles { get; set; } = null!;
 
-    public DbSet<UserRole> UserRoles { get; set; } 
+    public DbSet<UserRole> UserRoles { get; set; } = null!; 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
