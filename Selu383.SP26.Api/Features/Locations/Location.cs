@@ -12,5 +12,5 @@ public class Location
 
     public int TableCount { get; set; }
 
-    public int ManagerId { get; set; }
+    public int? ManagerId { get; set; }
 }

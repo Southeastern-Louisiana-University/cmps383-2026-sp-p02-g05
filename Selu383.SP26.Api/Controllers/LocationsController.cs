@@ -116,6 +116,7 @@ public class LocationsController(
         location.Name = dto.Name;
         location.Address = dto.Address;
         location.TableCount = dto.TableCount;
+        location.ManagerId = dto.ManagerId;
 
         dataContext.SaveChanges();
 

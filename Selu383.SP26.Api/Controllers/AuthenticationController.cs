@@ -30,7 +30,7 @@ public class AuthenticationController(
 
         var roles = await userManager.GetRolesAsync(user);
 
-        return Ok(new { Username = user.UserName, Id = user.Id, Roles = roles.ToArray() });
+        return Ok(new { UserName = user.UserName, Id = user.Id, Roles = roles.ToArray() });
     }
 
     [HttpPost("logout")]
