@@ -96,6 +96,8 @@ app
         x.MapControllers();
     });
 
+app.UseStaticFiles();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSpa(x =>
@@ -103,7 +105,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.MapFallbackToFile("index.html");
+    app.MapFallbackToFile("/index.html");
 }
 
 
